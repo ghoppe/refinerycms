@@ -45,9 +45,10 @@ module Refinery
     def find_page
       @page ||= case action_name
       when "home"
-        ::Refinery::Page.where(:link_url => '/').first
+        PageDecorator.new(::Refinery::Page.where(:link_url => '/').first)
       when "show"
-        ::Refinery::Page.find("#{params[:path]}/#{params[:id]}".split('/').last)
+        PageDecorator.new(::Refinery::Page.find(
+        	"#{params[:path]}/#{params[:id]}".split('/').last))
       end
     end
 

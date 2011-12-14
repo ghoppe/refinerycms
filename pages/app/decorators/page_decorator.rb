@@ -1,5 +1,5 @@
 class PageDecorator < ApplicationDecorator
- decorates :page
+  # decorates :page
 
   # Accessing Helpers
   #   You can access any helper via a proxy
@@ -29,4 +29,15 @@ class PageDecorator < ApplicationDecorator
   #     h.content_tag :span, time.strftime("%a %m/%d/%y"), 
   #                   :class => 'timestamp'
   #   end
+  
+  def all_sections_html  
+  end
+  
+  def section_html(section)
+  end
+  
+  def title_html
+  	h.content_tag :h1, model.title, id: "body_content_title"
+  end
+  
 end
