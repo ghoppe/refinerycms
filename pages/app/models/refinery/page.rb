@@ -11,7 +11,7 @@ module Refinery
 
     # Delegate SEO Attributes to globalize3 translation
     seo_fields = ::SeoMeta.attributes.keys.map{|a| [a, :"#{a}="]}.flatten
-    delegate *(seo_fields << {:to => :translation})
+    delegate(*(seo_fields << {:to => :translation}))
 
     attr_accessible :id, :deletable, :link_url, :menu_match, :meta_keywords,
                     :skip_to_first_child, :position, :show_in_menu, :draft,
@@ -31,8 +31,8 @@ module Refinery
       has_friendly_id :custom_slug_or_title, :use_slug => true,
                       :default_locale => (::Refinery::I18n.default_frontend_locale rescue :en),
                       :reserved_words => %w(index new session login logout users refinery admin images wymiframe),
-                      :approximate_ascii => ::Refinery::Setting.find_or_set(:approximate_ascii, false, :scoping => "pages"),
-                      :strip_non_ascii => ::Refinery::Setting.find_or_set(:strip_non_ascii, false, :scoping => "pages")
+                      :approximate_ascii => Refinery::Pages.config.approximate_ascii,
+                      :strip_non_ascii => Refinery::Pages.config.strip_non_ascii
     end
 
     # Docs for acts_as_indexed http://github.com/dougal/acts_as_indexed
@@ -101,11 +101,6 @@ module Refinery
         end
         # A join implies readonly which we don't really want.
         joins(:translations).where(globalized_conditions).where(conditions).readonly(false)
-      end
-
-      # Accessor to find out the default page parts created for each new page
-      def default_parts
-        ::Refinery::Setting.find_or_set(:default_page_parts, ["Body", "Side Body"])
       end
 
       # Wraps up all the checks that we need to do to figure out whether

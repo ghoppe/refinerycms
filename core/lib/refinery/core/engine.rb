@@ -1,6 +1,3 @@
-require 'refinerycms-core'
-require 'rails'
-
 module Refinery
   module Core
     class Engine < ::Rails::Engine
@@ -76,10 +73,6 @@ module Refinery
           plugin.always_allow_access = true
           plugin.menu_match = /refinery\/(refinery_)?dialogs/
         end
-      end
-
-      initializer "refinery.configuration" do |app|
-        app.config.refinery = Refinery::Configuration.new
       end
 
       initializer "refinery.routes" do |app|

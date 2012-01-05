@@ -75,18 +75,18 @@ module Refinery
       end
     end
 
-    describe '#always_allow_access?' do
+    describe '#always_allow_access' do
       it 'returns false if @always_allow_access is not set or its set to false' do
-        plugin.always_allow_access?.should be_false
+        plugin.always_allow_access.should be_false
       end
 
       it 'returns true if set so' do
-        plugin.stub(:always_allow_access?).and_return(true)
-        plugin.always_allow_access?.should be
+        plugin.stub(:always_allow_access).and_return(true)
+        plugin.always_allow_access.should be
       end
     end
 
-    describe '#dashboard?' do
+    describe '#dashboard' do
       it 'returns false if @dashboard is not set or its set to false' do
         plugin.dashboard.should be_false
       end
@@ -99,7 +99,7 @@ module Refinery
 
     describe '#menu_match' do
       it 'returns regexp based on plugin name' do
-        plugin.menu_match.should == /refinery\/refinery_rspec$/
+        plugin.menu_match.should == %r{refinery/refinery_rspec(/.+?)?$}
       end
     end
 
@@ -109,8 +109,8 @@ module Refinery
         plugin.highlighted?({:controller => 'refinery/refinery_rspec'}).should be
       end
 
-      it 'returns true if dashboard? is true and params[:action] == error_404' do
-        plugin.stub(:dashboard?).and_return(true)
+      it 'returns true if dashboard is true and params[:action] == error_404' do
+        plugin.stub(:dashboard).and_return(true)
         plugin.highlighted?({:action => 'error_404'}).should be
       end
     end
@@ -149,6 +149,17 @@ module Refinery
       context 'when controller and directory not present' do
         it 'returns hash based on plugins name' do
           plugin.url.should == {:controller => '/admin/refinery_rspec'}
+        end
+      end
+    end
+
+    describe '#activity_by_class_name' do
+      before { plugin.activity = [ { :class_name => "X::Y::Z" }, { :class_name => "X::Y::ZZ" }] }
+
+      context 'when the plugin have diferents activities' do
+        it 'returns the correct activity' do
+          plugin.activity_by_class_name("X::Y::Z").first.should == plugin.activity.first
+          plugin.activity_by_class_name("X::Y::ZZ").first.should == plugin.activity.last
         end
       end
     end

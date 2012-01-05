@@ -11,7 +11,6 @@ module Refinery
 
   autoload :Activity, 'refinery/activity'
   autoload :ApplicationController, 'refinery/application_controller'
-  autoload :Configuration, 'refinery/configuration'
   autoload :Engine, 'refinery/engine'
   autoload :Menu, 'refinery/menu'
   autoload :MenuItem, 'refinery/menu_item'
@@ -167,16 +166,8 @@ module Refinery
   end
 
   module Core
-    require 'refinery/core/engine' if defined?(Rails)
-
-    include ActiveSupport::Configurable
-
-    config_accessor :rescue_not_found, :s3_backend, :base_cache_key, :site_name
-
-    self.rescue_not_found = false
-    self.s3_backend = false
-    self.base_cache_key = :refinery
-    self.site_name = "Company Name"
+    require 'refinery/core/engine'
+    require 'refinery/core/configuration'
 
     class << self
       def root

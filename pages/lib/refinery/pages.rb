@@ -9,20 +9,11 @@ module Refinery
   autoload :PagesGenerator, 'generators/refinery/pages/pages_generator'
 
   module Pages
-    require 'refinery/pages/engine' if defined?(Rails)
+    require 'refinery/pages/engine'
+    require 'refinery/pages/configuration'
     require 'refinery/pages/tab'
 
     autoload :InstanceMethods, 'refinery/pages/instance_methods'
-
-    include ActiveSupport::Configurable
-
-    config_accessor :pages_per_dialog, :pages_per_admin_index, :new_page_parts,
-                    :marketable_urls
-
-    self.pages_per_dialog = 14
-    self.pages_per_admin_index = 20
-    self.new_page_parts = false
-    self.marketable_urls = true
 
     class << self
       def root
@@ -31,6 +22,18 @@ module Refinery
 
       def factory_paths
         @factory_paths ||= [ root.join('spec', 'factories').to_s ]
+      end
+
+      def valid_templates(*pattern)
+        [Rails.root, Refinery::Plugins.registered.pathnames].flatten.uniq.map do |p|
+          p.join(*pattern)
+        end.map(&:to_s).map do |p|
+          Dir[p]
+        end.select(&:any?).flatten.map do |f|
+          File.basename(f)
+        end.map do |p|
+          p.split('.').first
+        end
       end
     end
 

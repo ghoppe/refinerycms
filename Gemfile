@@ -26,14 +26,19 @@ unless defined?(JRUBY_VERSION)
 end
 
 group :development do
-  gem 'rails-dev-tweaks', '~> 0.5.0'
+  gem 'rails-dev-tweaks', '~> 0.5.2'
   # see https://github.com/wavii/rails-dev-tweaks/issues/3
   gem 'routing-filter', :git => 'git://github.com/nevir/routing-filter.git'
 end
 
 group :development, :test do
   gem 'refinerycms-testing', '~> 2.0.0'
-  gem 'capybara-webkit', '~> 0.7.0'
+  # Fixes timeouts in JRuby - see https://github.com/thoughtbot/capybara-webkit/pull/220
+  if defined? JRUBY_VERSION
+    gem 'capybara-webkit', :git => 'git://github.com/dnagir/capybara-webkit.git' #'~> 0.7.0'
+  else
+    gem 'capybara-webkit', '~> 0.7.2'
+  end
   gem 'generator_spec'
   gem 'database_cleaner', :git => 'git://github.com/bmabey/database_cleaner.git'
 
@@ -64,6 +69,7 @@ group :development, :test do
       if RbConfig::CONFIG['target_os'] =~ /linux/i
         gem 'rb-inotify', '>= 0.5.1'
         gem 'libnotify',  '~> 0.1.3'
+        gem 'therubyracer', '~> 0.9.9'
       end
     end
   end
@@ -90,7 +96,7 @@ group :assets do
   gem 'uglifier'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 1.0.19'
 
 # END REFINERY CMS DEVELOPMENT ================================================
 

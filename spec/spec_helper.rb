@@ -1,3 +1,5 @@
+$VERBOSE = ENV['VERBOSE'] || false
+
 require 'rubygems'
 
 if RUBY_VERSION > "1.9"
@@ -69,16 +71,4 @@ unless (begin; require 'spork'; rescue LoadError; nil end).nil?
 else
   setup_environment
   each_run
-end
-
-def capture_stdout(stdin_str = '')
-  begin
-    require 'stringio'
-    $o_stdin, $o_stdout, $o_stderr = $stdin, $stdout, $stderr
-    $stdin, $stdout, $stderr = StringIO.new(stdin_str), StringIO.new, StringIO.new
-    yield
-    {:stdout => $stdout.string, :stderr => $stderr.string}
-  ensure
-    $stdin, $stdout, $stderr = $o_stdin, $o_stdout, $o_stderr
-  end
 end

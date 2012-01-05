@@ -14,7 +14,7 @@ module Refinery
             # and adds the filename onto the end (say the file was 'refinery_is_awesome.pdf')
             # /system/images/BAhbB1sHOgZmIiMyMDEwLzA5LzAxL1NTQ19DbGllbnRfQ29uZi5qcGdbCDoGcDoKdGh1bWIiDjk0MngzNjAjYw/refinery_is_awesome.pdf
             c.url_format = '/system/resources/:job/:basename.:format'
-            c.secret = ::Refinery::Setting.find_or_set(:dragonfly_secret, Array.new(24) { rand(256) }.pack('C*').unpack('H*').first)
+            c.secret = Refinery::Core.config.dragonfly_secret
           end
 
           if ::Refinery.s3_backend
@@ -32,8 +32,8 @@ module Refinery
 
         def attach!(app)
           ### Extend active record ###
-
-          app.config.middleware.insert_after 'Rack::Lock', 'Dragonfly::Middleware', :resources
+          app.config.middleware.insert_before Refinery::Resources.config.dragonfly_insert_before,
+                                              'Dragonfly::Middleware', :resources
 
           app.config.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
             :verbose     => Rails.env.development?,

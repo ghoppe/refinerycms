@@ -21,7 +21,7 @@ module ::Refinery
 
       def new
         @page = ::Refinery::Page.new(params)
-        ::Refinery::Page.default_parts.each_with_index do |page_part, index|
+        Refinery::Pages.config.default_parts.each_with_index do |page_part, index|
           @page.parts << ::Refinery::PagePart.new(:title => page_part, :position => index)
         end
       end
@@ -48,11 +48,11 @@ module ::Refinery
       end
 
       def load_valid_templates
-        layout_whitelist        = ::Refinery::Setting.find_or_set(:layout_template_whitelist, %w(application), :scoping => 'pages')
-        @valid_layout_templates = layout_whitelist & valid_templates('app', 'views', '{layouts,refinery/layouts}', '*html*')
+        @valid_layout_templates = Refinery::Pages.config.layout_template_whitelist &
+                                  Refinery::Pages.valid_templates('app', 'views', '{layouts,refinery/layouts}', '*html*')
 
-        template_whitelist    = ::Refinery::Setting.find_or_set(:view_template_whitelist, %w(home show), :scoping => 'pages')
-        @valid_view_templates = template_whitelist & valid_templates('app', 'views', '{pages,refinery/pages}', '*html*')
+        @valid_view_templates = Refinery::Pages.config.view_template_whitelist &
+                                Refinery::Pages.valid_templates('app', 'views', '{pages,refinery/pages}', '*html*')
       end
 
       def restrict_access
@@ -74,14 +74,6 @@ module ::Refinery
           @page = ::Refinery::Page.new(params[:page])
           render :new
         end
-      end
-
-      def valid_templates(*pattern)
-        [::Rails.root, ::Refinery::Plugins.registered.pathnames].flatten.uniq.map{|p|
-          p.join(*pattern)
-        }.map(&:to_s).map{ |p| Dir[p] }.select(&:any?).flatten.map{|f|
-          File.basename(f)}.map {|p| p.split('.').first
-        }
       end
     end
   end
