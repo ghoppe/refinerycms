@@ -39,8 +39,6 @@ module Refinery
       # Include the refinery controllers and helpers dynamically
       config.to_prepare &method(:refinery_inclusion!).to_proc
 
-      after_inclusion &method(:load_decorators).to_proc
-
       # Wrap errors in spans
       config.to_prepare do
         ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|

@@ -58,8 +58,15 @@
   end
 -%>
 
-<section id='body_content'<%= " class='#{css.join(' ')}'" if css.present? %>>
+<div id="body_content" class="<%= @page.container_css(local_assigns) %>">
   <%= @page.title_html %>
-  <%= raw sections.map{|section| section[:html]}.join("\n") -%>
-</section>
+  <% @page.sections(local_assigns).each do |s| %>
+  	<%= render(:partial => "/refinery/content_#{s[:yield]}") rescue render(:partial => "/refinery/content_default") %>
+  	<section id="<%= s[:yield] %>">
+  		<%= raw(s[:html]) %>
+  		<%= yield s[:yield] %>
+  	</section>
+  <% end %>
+</div>
+
 <%= render :partial => '/refinery/draft_page_message' unless @page.nil? or @page.live? -%>
