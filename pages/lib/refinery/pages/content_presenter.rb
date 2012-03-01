@@ -35,7 +35,7 @@ module Refinery
       end
 
       def to_html(can_use_fallback = true)
-        content_tag :section, sections_html(can_use_fallback), :id => 'body_content', :class => blank_section_css_classes(can_use_fallback).join(' ')
+        content_tag :div, sections_html(can_use_fallback), :id => 'body_content', :class => blank_section_css_classes(can_use_fallback).join(' ')
       end
 
       private
