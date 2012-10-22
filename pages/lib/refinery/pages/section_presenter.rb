@@ -35,7 +35,7 @@ module Refinery
 
         content = content_html(can_use_fallback)
         if content.present?
-          wrap_content_in_tag(content)
+          render "refinery/content_section", :content => content, :id => id
         end
       end
 
