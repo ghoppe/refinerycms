@@ -33,7 +33,7 @@ describe "dashboard" do
 
   describe "latest activity" do
     before do
-      3.times { |n| FactoryGirl.create :refinery_user, :username => "ugisozols#{n}" }
+      3.times { |n| FactoryGirl.create :refinery_user, :username => "ugisozols#{n}", :email => "test#{n}@sample.com" }
       3.times { |n| FactoryGirl.create :page, :title => "Refinery CMS #{n}" }
     end
 

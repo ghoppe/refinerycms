@@ -8,6 +8,7 @@ module Refinery
 
     before do
       FactoryGirl.create(:refinery_user, :username => "ugisozols",
+                                         :email => "test@sample.com",
                                          :password => "123456",
                                          :password_confirmation => "123456")
 
@@ -74,6 +75,7 @@ module Refinery
     before do
       FactoryGirl.create(:refinery_user,
         :username => "ugisozols",
+        :email => "test@sample.com",
         :password => "123456",
         :password_confirmation => "123456"
       )

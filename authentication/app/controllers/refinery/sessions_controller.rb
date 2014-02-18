@@ -6,6 +6,8 @@ module Refinery
     before_filter :clear_unauthenticated_flash, :only => [:new]
 
     def create
+      puts "!!!!!! ^^^^^^ !!!!! \n\n\n"
+      puts auth_options
       super
     rescue ::BCrypt::Errors::InvalidSalt, ::BCrypt::Errors::InvalidHash
       flash[:error] = t('password_encryption', :scope => 'refinery.users.forgot')

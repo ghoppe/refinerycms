@@ -25,6 +25,7 @@ module Refinery
     attr_accessor :login
 
     validates :username, presence: true, uniqueness: true
+    validates :email, presence: true
     before_validation :downcase_username, :strip_username
 
     class << self

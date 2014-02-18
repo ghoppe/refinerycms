@@ -32,20 +32,20 @@ describe Refinery::Admin::UsersController do
 
   describe "#create" do
     it "creates a new user with valid params" do
-      user = Refinery::User.new :username => "bob"
+      user = Refinery::User.new :username => "bob", :email => 'test@sample.com'
       user.should_receive(:save).once{ true }
       Refinery::User.should_receive(:new).once.with(instance_of(ActionController::Parameters)){ user }
-      post :create, :user => {:username => 'bobby'}
+      post :create, :user => {:username => 'bobby', :email => 'test@sample.com'}
       response.should be_redirect
     end
 
     it_should_behave_like "new, create, update, edit and update actions"
 
     it "re-renders #new if there are errors" do
-      user = Refinery::User.new :username => "bob"
+      user = Refinery::User.new :username => "bob", :email => 'test@sample.com'
       user.should_receive(:save).once{ false }
       Refinery::User.should_receive(:new).once.with(instance_of(ActionController::Parameters)){ user }
-      post :create, :user => {:username => 'bobby'}
+      post :create, :user => {:username => 'bobby', :email => 'test@sample.com'}
       response.should be_success
       response.should render_template("refinery/admin/users/new")
     end

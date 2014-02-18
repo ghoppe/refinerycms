@@ -18,7 +18,7 @@ module Refinery
           let(:controller_permission) { true }
           roles = handle_deprecated_roles! roles
           let(:logged_in_user) do
-            user = double 'Refinery::User', :username => 'Joe Fake'
+            user = double 'Refinery::User', :username => 'Joe Fake', :email => "refinery@cms.com"
 
             roles.each do |role|
               user.stub(:has_role?).with(role).and_return true
