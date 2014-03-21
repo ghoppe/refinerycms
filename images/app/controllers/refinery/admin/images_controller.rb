@@ -8,6 +8,13 @@ module Refinery
               :xhr_paging => true
 
       before_filter :change_list_mode_if_specified, :init_dialog
+      respond_to :json, :only => :list
+      
+      def list
+        @images = ::Refinery::Image.all
+        
+        render :json => custom_json_for(@images)
+      end
 
       def new
         @image = ::Refinery::Image.new if @image.nil?
@@ -141,6 +148,19 @@ module Refinery
 
       def image_params
         params.require(:image).permit(:image, :image_size)
+      end
+      
+      private
+      
+      def custom_json_for(value)
+        list = value.map do |image|
+            { :id => " #{image.id}",
+              :title => image.title.to_s,
+              :thumb => image.thumbnail(geometry: "200x200#c").url.to_s,
+              :image => image.url.to_s
+            }
+        end
+        list.to_json
       end
 
     end

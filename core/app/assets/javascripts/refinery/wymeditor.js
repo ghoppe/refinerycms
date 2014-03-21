@@ -33,5 +33,4 @@
  *= require wymeditor/classes
  *= require wymeditor/validators
  *= require_tree ../wymeditor/browsers
- *= require refinery/boot_wym
 */

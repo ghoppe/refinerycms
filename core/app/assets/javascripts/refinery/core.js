@@ -3,6 +3,11 @@ $(document).ready(function(){
   $('form input[type=text]:first').focus();
 
   init_flash_messages();
+  
+  $('.wymeditor').each(function(){
+      var id = CKEDITOR.replace( this.id );
+  });
+  
 });
 
 init_flash_messages = function(){
