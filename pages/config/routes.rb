@@ -11,13 +11,16 @@ Refinery::Core::Engine.routes.draw do
     end
   end
 
+  scope(:path => Refinery::Core.backend_route) do
+    get 'pages/*path/edit', :to => 'admin/pages#edit', :as => 'edit_admin_page'
+  end
+
   namespace :admin, :path => Refinery::Core.backend_route do
-    get 'pages/*path/edit', :to => 'pages#edit'
     get 'pages/*path/children', :to => 'pages#children', :as => 'children_pages'
-    patch 'pages/*path', :to => 'pages#update'
+    patch 'pages/*path', :to => 'pages#update', :as => 'page'
     delete 'pages/*path', :to => 'pages#destroy'
 
-    resources :pages, :except => :show do
+    resources :pages, :except => [:show, :edit, :update, :destroy] do
       post :update_positions, :on => :collection
     end
 
