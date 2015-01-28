@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.files             = `git ls-files`.split("\n")
   s.test_files        = `git ls-files -- spec/*`.split("\n")
 
-  s.required_ruby_version = '>= 2.1.2'
+  s.required_ruby_version = Refinery::Version.required_ruby_version
 
   s.add_dependency 'refinerycms-i18n',            '~> 3.0.0.dev'
   s.add_dependency 'awesome_nested_set',          '~> 3.0.0'
@@ -33,5 +33,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'coffee-rails',                '~> 4.0.0'
   s.add_dependency 'jquery-rails',                '>= 2.3.0'
   s.add_dependency 'jquery-ui-rails',             '~> 5.0.0'
-  s.add_dependency 'decorators',                  '~> 1.0.0'
+  s.add_dependency 'decorators',                  '~> 2.0.0'
 end
