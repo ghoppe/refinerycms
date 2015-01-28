@@ -8,7 +8,7 @@ module Refinery
               :include => [:translations, :children],
               :paging => false
 
-      before_action :load_valid_templates, :only => [:edit, :new, :create, :update]
+      helper_method :valid_layout_templates, :valid_view_templates
 
       def new
         @page = Page.new(new_page_params)
@@ -85,11 +85,14 @@ module Refinery
         end
       end
 
-      def load_valid_templates
-        @valid_layout_templates = Pages.layout_template_whitelist &
-                                  Pages.valid_templates('app', 'views', '{layouts,refinery/layouts}', '*html*')
+      def valid_layout_templates
+        Pages.layout_template_whitelist & Pages.valid_templates(
+            'app', 'views', '{layouts,refinery/layouts}', '*html*'
+          )
+      end
 
-        @valid_view_templates = Pages.valid_templates('app', 'views', '{pages,refinery/pages}', '*html*')
+      def valid_view_templates
+        Pages.valid_templates('app', 'views', '{pages,refinery/pages}', '*html*')
       end
 
       def page_params
