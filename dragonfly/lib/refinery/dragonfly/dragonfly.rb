@@ -32,7 +32,7 @@ module Refinery
 
           #  These options require a name and block
           define_url extension.dragonfly_define_url if extension.dragonfly_define_url.present?
-          before_serve extension.dragonfly_before_serve if extension.dragonfly_before_serve.present?
+          before_serve(&extension.dragonfly_before_serve) if extension.dragonfly_before_serve.present?
 
 
           # There can be more than one instance of each of these options.
@@ -52,21 +52,21 @@ module Refinery
             processor p[:name], p[:block]
           end unless extension.dragonfly_processors.blank?
 
-          if extension.s3_datastore
+          if extension.s3_datastore?
             require 'dragonfly/s3_data_store'
             datastore :s3,{
-              s3_access_key_id: extension.s3_access_key_id,
-              s3_datastore: extension.s3_datastore,
-              s3_bucket_name: extension.s3_bucket_name,
-              s3_fog_storage_options: extension.s3_fog_storage_options,
-              s3_region: extension.s3_region,
-              s3_root_path: extension.s3_root_path,
-              s3_secret_access_key: extension.s3_secret_access_key,
-              s3_storage_path: extension.s3_storage_path,
-              s3_storage_headers: extension.s3_storage_headers,
-              s3_url_host: extension.s3_url_host,
-              s3_url_scheme: extension.s3_url_scheme,
-              s3_use_iam_profile: extension.s3_use_iam_profile
+              access_key_id: extension.s3_access_key_id,
+              datastore: extension.s3_datastore,
+              bucket_name: extension.s3_bucket_name,
+              fog_storage_options: extension.s3_fog_storage_options,
+              region: extension.s3_region,
+              root_path: extension.s3_root_path,
+              secret_access_key: extension.s3_secret_access_key,
+              storage_path: extension.s3_storage_path,
+              storage_headers: extension.s3_storage_headers,
+              url_host: extension.s3_url_host,
+              url_scheme: extension.s3_url_scheme,
+              use_iam_profile: extension.s3_use_iam_profile
             }
           end
 
@@ -81,8 +81,8 @@ module Refinery
           unless app.config.action_controller.perform_caching && app.config.action_dispatch.rack_cache
             app.config.middleware.insert 0, ::Rack::Cache, {
               verbose: extension.dragonfly_cache_log_level =='verbose',
-              metastore: URI.encode("file:#{extension.dragonfly_cache_store_root}/meta"), # URI encoded in case of spaces
-              entitystore: URI.encode("file:#{extension.dragonfly_cache_store_root}/body")
+              metastore: "file:#{extension.dragonfly_cache_store_root}/meta",
+              entitystore: "file:#{extension.dragonfly_cache_store_root}/body"
             }
           end
           app.config.middleware.insert_after ::Rack::Cache, ::Dragonfly::Middleware, extension.dragonfly_name

@@ -5,15 +5,15 @@ login: &login
   reconnect: false
   pool: 5
   username: root
-  password:
+  password: <%%= ENV['MYSQL_PASSWORD'] %>
   #socket: /tmp/mysql.sock
 <% elsif /postgresql/ === @database %>
   adapter: postgresql
   encoding: unicode
   database: refinery_database_development
   pool: 5
-  username: postgres
-  password: postgres
+  username: <%%= ENV.fetch('PGUSER', 'postgres') %>
+  password: <%%= ENV.fetch('PGPASSWORD', 'postgres') %>
   min_messages: warning
 <% else %>
   adapter: sqlite3

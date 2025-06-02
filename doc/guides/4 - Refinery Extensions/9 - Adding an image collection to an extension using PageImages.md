@@ -75,7 +75,7 @@ end
 Edit the file `vendor/extensions/shows/lib/refinery/shows.rb`:
 
 ```ruby
-require 'refinerycms-core'
+require 'refinery/core'
 
 module Refinery
   autoload :ShowsGenerator, 'generators/refinery/shows_generator'
@@ -184,7 +184,7 @@ module Refinery
           params.require(:show).permit(permitted_show_params)
         end
 
-        # Only allow a trusted parameter "white list" through.
+        # Only allow a trusted parameter "permit list" through.
         def permitted_show_params
           [:title, :blurb]
         end

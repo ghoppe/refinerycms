@@ -53,7 +53,7 @@ module Refinery
         singular_name = options[:singular_name]
         plural_name = options[:plural_name]
 
-        module_eval %(
+        module_eval <<-RUBY, __FILE__, __LINE__ + 1
           def self.crudify_options
             #{options.inspect}
           end
@@ -85,7 +85,7 @@ module Refinery
           end
 
           def update
-            if @#{singular_name}.update_attributes(#{singular_name}_params)
+            if @#{singular_name}.update(#{singular_name}_params)
               flash.notice = t(
                 'refinery.crudify.updated',
                 :what => "'\#{@#{singular_name}.#{options[:title_attribute]}}'"
@@ -181,7 +181,7 @@ module Refinery
                 if request.xhr?
                   render :partial => '/refinery/message'
                 else
-                  redirect_to :back
+                  redirect_back(fallback_location: { action: 'edit' })
                 end
               else
                 redirect_back_or_default redirect_url
@@ -227,21 +227,21 @@ module Refinery
                     :create_or_update_successful,
                     :create_or_update_unsuccessful,
                     :merge_position_into_params!
-        ), __FILE__, __LINE__
+        RUBY
 
         # Methods that are only included when this controller is searchable.
         if options[:searchable]
           if options[:paging]
-            module_eval %(
+            module_eval <<-RUBY, __FILE__, __LINE__ + 1
               def index
                 search_all_#{plural_name} if searching?
                 paginate_all_#{plural_name}
 
                 render_partial_response?
               end
-            ), __FILE__, __LINE__
+            RUBY
           else
-            module_eval %(
+            module_eval <<-RUBY, __FILE__, __LINE__ + 1
               def index
                 if searching?
                   search_all_#{plural_name}
@@ -251,31 +251,31 @@ module Refinery
 
                 render_partial_response?
               end
-            ), __FILE__, __LINE__
+            RUBY
           end
 
         else
           if options[:paging]
-            module_eval %(
+            module_eval <<-RUBY, __FILE__, __LINE__ + 1
               def index
                 paginate_all_#{plural_name}
 
                 render_partial_response?
               end
-            ), __FILE__, __LINE__
+            RUBY
           else
-            module_eval %(
+            module_eval <<-RUBY, __FILE__, __LINE__ + 1
               def index
                 find_all_#{plural_name}
                 render_partial_response?
               end
-            ), __FILE__, __LINE__
+            RUBY
           end
 
         end
 
         if options[:sortable]
-          module_eval %(
+          module_eval <<-RUBY, __FILE__, __LINE__ + 1
             def reorder
               find_all_#{plural_name}
             end
@@ -333,10 +333,10 @@ module Refinery
             end
 
             protected :after_update_positions
-          ), __FILE__, __LINE__
+          RUBY
         end
 
-        module_eval %(
+        module_eval <<-RUBY, __FILE__, __LINE__ + 1
           class << self
             def pageable?
               #{options[:paging]}
@@ -351,8 +351,7 @@ module Refinery
               #{options[:searchable]}
             end
           end
-        ), __FILE__, __LINE__
-
+        RUBY
       end
 
     end

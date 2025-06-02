@@ -16,6 +16,9 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 
 require 'rspec/rails'
 require 'capybara/rspec'
+require 'webdrivers/chromedriver'
+require 'falcon/capybara'
+Capybara.server = :falcon
 
 if ENV['RETRY_COUNT']
   require 'rspec/retry'
@@ -39,8 +42,27 @@ RSpec.configure do |config|
   config.include ActionView::TestCase::Behavior, :file_path => %r{spec/presenters}
   config.infer_spec_type_from_file_location!
 
+  config.use_transactional_fixtures = true
+
+  config.when_first_matching_example_defined(type: :system) do
+    config.before :suite do
+      # Preload assets
+      # This should avoid capybara timeouts, and avoid counting asset compilation
+      # towards the timing of the first feature spec.
+      Rails.application.precompiled_assets
+    end
+  end
+
   config.before(:each) do
     ::I18n.default_locale = I18n.locale = Mobility.locale = :en
+  end
+
+  config.before(:each, type: :system) do
+    driven_by :rack_test
+  end
+
+  config.before(:each, type: :system, js: true) do
+    driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1080]
   end
 
   unless ENV['FULL_BACKTRACE']
@@ -61,11 +83,3 @@ end
 }.flatten.sort.each do |support_file|
   require support_file
 end
-
-Capybara.register_driver :poltergeist_debug do |app|
-  Capybara::Poltergeist::Driver.new(app, debug: false, js_errors:  true, inspector: :open)
-end
-
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
-Capybara.always_include_port = true

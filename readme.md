@@ -10,6 +10,10 @@ You can chat with us using Gitter:
 
 [![Gitter chat](https://badges.gitter.im/refinery/refinerycms.svg)](https://gitter.im/refinery/refinerycms)
 
+You can deploy an example app to Heroku:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/refinery/refinerycms-example-app)
+
 ## Requirements
 
 * [Bundler](http://gembundler.com)
@@ -54,10 +58,6 @@ Unlike other content managers, Refinery is truly __aimed at the end user__ makin
 * __Extend with custom extensions__ to do anything Refinery doesn't do out of the box.
 * Sticks to __"the Rails way"__ as much as possible; we don't force you to learn new templating languages.
 * Uses [jQuery](http://jquery.com/) for fast and concise Javascript.
-
-### Demo
-
-Wanna see Refinery for yourself? [Try the demo](http://demo.refinerycms.com/refinery).
 
 ## Help and Documentation
 

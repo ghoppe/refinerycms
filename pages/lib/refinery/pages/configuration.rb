@@ -8,7 +8,7 @@ module Refinery
                     :cache_pages_full, :layout_template_whitelist,
                     :use_layout_templates, :page_title, :absolute_page_links, :types,
                     :auto_expand_admin_tree, :show_title_in_body,
-                    :friendly_id_reserved_words, :layout_templates_pattern, :view_templates_pattern,
+                    :friendly_id_reserved_words, :reserved_paths, :layout_templates_pattern, :view_templates_pattern,
                     :add_whitelist_elements, :add_whitelist_attributes, :whitelist_elements, :whitelist_attributes,
                     :home_page_path
 
@@ -31,11 +31,11 @@ module Refinery
 
     class << self
       def whitelist_elements
-        Loofah::HTML5::WhiteList::ALLOWED_ELEMENTS.merge(config.add_whitelist_elements)
+        Loofah::HTML5::SafeList::ALLOWED_ELEMENTS.merge(config.add_whitelist_elements)
       end
 
       def whitelist_attributes
-        Loofah::HTML5::WhiteList::ALLOWED_ATTRIBUTES.merge(config.add_whitelist_attributes)
+        Loofah::HTML5::SafeList::ALLOWED_ATTRIBUTES.merge(config.add_whitelist_attributes)
       end
 
       def layout_template_whitelist
@@ -61,9 +61,10 @@ module Refinery
     self.absolute_page_links = false
     self.types = Types.registered
     self.auto_expand_admin_tree = true
+    self.reserved_paths = %w(/rails/active_storage)
     self.friendly_id_reserved_words = %w(
       index new session login logout users refinery admin images
-    )
+    ) | self.reserved_paths.map { |path| path.split('/').reject(&:blank?).first}.flatten.uniq
     self.layout_templates_pattern = 'app', 'views', '{layouts,refinery/layouts}', '*html*'
     self.view_templates_pattern = 'app', 'views', '{pages,refinery/pages}', '*html*'
   end
