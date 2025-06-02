@@ -750,6 +750,7 @@ function ImageDialog(options) {
       self.toggle_image($(this));
     });
 
+    // Shift-click multiple images
     $('#existing_image_area_content ul li img').mouseover(
       function (e) {
         if (e.shiftKey) {
