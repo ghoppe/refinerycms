@@ -21,7 +21,7 @@ module Refinery
       end
 
       def factory_paths
-        @factory_paths ||= [ root.join('spec', 'factories').to_s ]
+        @factory_paths ||= [root.join('spec', 'factories').to_s]
       end
 
       def valid_templates(*pattern)

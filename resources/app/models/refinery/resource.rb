@@ -39,6 +39,7 @@ module Refinery
 
     def update_index
       return if aai_config.disable_auto_indexing
+
       copy = dup.tap { |r| r.file_uid = r.file_uid_was }
       self.class.index_remove(copy)
       self.class.index_add(self)

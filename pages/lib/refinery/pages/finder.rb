@@ -30,17 +30,18 @@ module Refinery
       end
 
       def with_mobility
-        mobility_conditions = {:locale => ::Mobility.locale.to_s}.merge(conditions)
+        mobility_conditions = { :locale => ::Mobility.locale.to_s }.merge(conditions)
         translations_conditions = translations_conditions(mobility_conditions)
 
         # A join implies readonly which we don't really want.
-        Page.i18n.where(mobility_conditions).
-             joins(:translations).
-             where(translations_conditions).
-             readonly(false)
+        Page.i18n.where(mobility_conditions)
+            .joins(:translations)
+            .where(translations_conditions)
+            .readonly(false)
       end
 
       private
+
       attr_accessor :conditions
 
       def translated_attributes
@@ -56,7 +57,6 @@ module Refinery
         end
         translations_conditions
       end
-
     end
 
     class FinderByTitle < Finder
@@ -70,6 +70,7 @@ module Refinery
       end
 
       private
+
       attr_accessor :title
     end
 
@@ -87,6 +88,7 @@ module Refinery
       end
 
       private
+
       attr_accessor :slug
     end
 
@@ -104,6 +106,7 @@ module Refinery
       end
 
       private
+
       attr_accessor :path
 
       def slugs_scoped_by_parent?
@@ -173,6 +176,7 @@ module Refinery
       end
 
       private
+
       attr_accessor :id, :path
     end
   end

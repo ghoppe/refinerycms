@@ -28,7 +28,7 @@ module Refinery
         end
       end
 
-      config.autoload_paths += %W( #{config.root}/lib )
+      config.autoload_paths += %W(#{config.root}/lib)
 
       # Include the refinery controllers and helpers dynamically
       config.to_prepare(&method(:refinery_inclusion!).to_proc)
@@ -45,11 +45,15 @@ module Refinery
       end
 
       initializer "refinery.mobility" do
-        Mobility.configure do |config|
-          config.default_backend = :table
-          config.accessor_method = :translates
-          config.query_method    = :i18n
-          config.default_options[:dirty] = true
+        Mobility.configure do
+          plugins do
+            backend :table
+            active_record
+            dirty
+            reader
+            writer
+            query
+          end
         end
       end
 
@@ -82,7 +86,7 @@ module Refinery
         app.config.autoload_paths += [
           Rails.root.join('app', 'presenters'),
           Rails.root.join('vendor', '**', '**', 'app', 'presenters'),
-          Refinery.roots.map{ |r| r.join('**', 'app', 'presenters')}
+          Refinery.roots.map { |r| r.join('**', 'app', 'presenters') }
         ].flatten
       end
 

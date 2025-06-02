@@ -51,6 +51,7 @@ module Refinery
     end
 
     private
+
     def after_inclusion_procs
       @@after_inclusion_procs ||= []
     end
